@@ -91,7 +91,7 @@
 		</topic>
 		<topic href="contents/303_runtime_concepts.html" label="Language Implementation">
 			<topic href="contents/303_runtime_concepts.html#code-generation" label="Code Generation">
-				<topic href="contents/303_runtime_concepts.html#igenerator" label="IGenerator">
+				<topic href="contents/303_runtime_concepts.html#igenerator2" label="IGenerator2">
 				</topic>
 				<topic href="contents/303_runtime_concepts.html#output-configurations" label="Output Configurations">
 				</topic>

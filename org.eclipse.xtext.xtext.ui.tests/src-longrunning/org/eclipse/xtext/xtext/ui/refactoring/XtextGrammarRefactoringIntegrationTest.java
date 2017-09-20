@@ -222,6 +222,7 @@ public class XtextGrammarRefactoringIntegrationTest extends AbstractLinkedEditin
 				refPackage);
 		refToGreetingResource.unload();
 		ecoreModelResource.unload();
+		waitForBuild();
 		waitForDisplay();
 		XtextEditor editor = openEditor(grammarFile);
 		doRefactoring(editor);

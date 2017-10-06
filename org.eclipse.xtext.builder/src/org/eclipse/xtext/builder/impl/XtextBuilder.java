@@ -122,8 +122,10 @@ public class XtextBuilder extends IncrementalProjectBuilder {
 	protected IProject[] build(final int kind, Map args, IProgressMonitor monitor) throws CoreException {
 		if (IBuildFlag.FORGET_BUILD_STATE_ONLY.isSet(args)) {
 			forgetLastBuiltState();
+			System.out.println("forget " + getProject().getName() + " " + getKindAsString(kind));
 			return getProject().getReferencedProjects();
 		}
+		System.out.println("build " + getProject().getName() + " " + getKindAsString(kind));
 		Job.getJobManager().addJobChangeListener(MAKE_EGIT_JOB_SYSTEM);
 		long startTime = System.currentTimeMillis();
 		StoppedTask task = Stopwatches.forTask(String.format("XtextBuilder.build[%s]", getKindAsString(kind)));

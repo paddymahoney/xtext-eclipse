@@ -115,6 +115,9 @@ public class ClusteringBuilderState extends AbstractBuilderState {
      */
     @Override
     protected Collection<Delta> doUpdate(BuildData buildData, ResourceDescriptionsData newData, IProgressMonitor monitor) {
+    	
+    	System.out.println("doUpdate: " + buildData.getProjectName());
+    	
         final SubMonitor progress = SubMonitor.convert(monitor, 100);
 
 

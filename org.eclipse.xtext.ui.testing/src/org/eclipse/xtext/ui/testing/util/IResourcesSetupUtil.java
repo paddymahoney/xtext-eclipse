@@ -315,6 +315,7 @@ public class IResourcesSetupUtil {
 	 * after the resource change event, could wait for the auto build.
 	 */
 	public static void reallyWaitForAutoBuild() {
+		System.out.println("reallyWaitForAutoBuild");
 		boolean wasInterrupted = false;
 		do {
 			try {

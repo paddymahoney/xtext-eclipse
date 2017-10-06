@@ -271,6 +271,9 @@ public class QueuedBuildData {
 	}
 
 	public void queueURI(URI uri) {
+		
+		System.out.println("queueURI: " + uri);
+		
 		Iterable<Pair<IStorage, IProject>> iterable = mapper.getStorages(uri);
 		boolean associatedWithProject = false;
 		for (Pair<IStorage, IProject> pair : iterable) {

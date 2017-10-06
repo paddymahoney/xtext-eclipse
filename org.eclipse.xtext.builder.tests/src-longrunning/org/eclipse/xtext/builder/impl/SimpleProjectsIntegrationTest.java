@@ -18,7 +18,10 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.URI;
@@ -27,6 +30,7 @@ import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.xtext.builder.tests.builderTestLanguage.BuilderTestLanguagePackage;
+import org.eclipse.xtext.generator.trace.node.GeneratorWhiteSpaceConfig;
 import org.eclipse.xtext.ui.testing.util.IResourcesSetupUtil;
 import org.eclipse.xtext.resource.IReferenceDescription;
 import org.eclipse.xtext.ui.XtextProjectHelper;
@@ -338,6 +342,7 @@ public class SimpleProjectsIntegrationTest extends AbstractBuilderTest {
 	
 	@Test
 	public void testNewlyAddedReexportedSource() throws Exception {
+		System.out.println("Begin testNewlyAddedReexportedSource");
 		IJavaProject foo = createJavaProject("foo");
 		IJavaProject bar = createJavaProject("bar");
 		IJavaProject baz = createJavaProject("baz");
@@ -348,14 +353,22 @@ public class SimpleProjectsIntegrationTest extends AbstractBuilderTest {
 		addToClasspath(baz, JavaCore.newProjectEntry(bar.getPath(), false));
 		addSourceFolder(baz, "src");
 		IFile bazFile = createFile("baz/src/Baz"+F_EXT, "object Baz references Foo");
+		System.out.println("waitForBuild 1");
 		waitForBuild();
+		System.out.println("assert 1");
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		// this is here to allow introspection of the registered workspace listeners 
+		System.out.println(workspace);
 		assertEquals(1,countMarkers(bazFile));
 		IFile file = foo.getProject().getFile("foo.jar");
 		file.create(jarInputStream(new TextFile("foo/Foo"+F_EXT, "object Foo")), true, monitor());
 		IClasspathEntry newLibraryEntry = JavaCore.newLibraryEntry(file.getFullPath(), null, null,true);
 		addToClasspath(foo, newLibraryEntry);
+		System.out.println("waitForBuild 2");
 		waitForBuild();
+		System.out.println("assert 2");
 		assertEquals(0,countMarkers(bazFile));
+		System.out.println("End testNewlyAddedReexportedSource");
 	}
 	
 	@Test

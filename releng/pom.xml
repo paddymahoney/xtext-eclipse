@@ -16,6 +16,7 @@
 
 	<modules>
 		<module>org.eclipse.xtext.target</module>
+		<module>org.eclipse.xtext.latest.target</module>
 		<module>org.eclipse.xtext.tycho.parent</module>
 		<module>org.eclipse.xtext.tycho.plugin.parent</module>
 		<module>org.eclipse.xtext.tycho.feature.parent</module>

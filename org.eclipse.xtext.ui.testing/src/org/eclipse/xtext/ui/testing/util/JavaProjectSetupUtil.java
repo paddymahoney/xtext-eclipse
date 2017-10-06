@@ -17,6 +17,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ import java.util.jar.JarOutputStream;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -176,6 +178,17 @@ public class JavaProjectSetupUtil {
 	}
 	
 	public static void removeFromClasspath(IJavaProject from, int entryKind, IPath path) throws CoreException {
+		if (entryKind == IClasspathEntry.CPE_PROJECT) {
+			IResource member = ResourcesPlugin.getWorkspace().getRoot().findMember(path);			if (member instanceof IProject) {
+				try {
+					IResourcesSetupUtil.setReference(from.getProject(), (IProject)member);
+				} catch (InvocationTargetException | CoreException | InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		
+		}
+		
 		List<IClasspathEntry> classpath = Lists.newArrayList(from.getRawClasspath());
 		Iterator<IClasspathEntry> iterator = classpath.iterator();
 		while (iterator.hasNext()) {
@@ -262,6 +275,17 @@ public class JavaProjectSetupUtil {
 
 	public static void addToClasspath(IJavaProject javaProject, IClasspathEntry newClassPathEntry)
 			throws JavaModelException {
+		if (newClassPathEntry.getEntryKind() == IClasspathEntry.CPE_PROJECT) {
+			IResource member = ResourcesPlugin.getWorkspace().getRoot().findMember(newClassPathEntry.getPath());
+			if (member instanceof IProject) {
+				try {
+					IResourcesSetupUtil.setReference(javaProject.getProject(), (IProject)member);
+				} catch (InvocationTargetException | CoreException | InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		
+		}
 		IClasspathEntry[] newClassPath;
 		IClasspathEntry[] classPath = javaProject.getRawClasspath();
 		for (IClasspathEntry classPathEntry : classPath) {

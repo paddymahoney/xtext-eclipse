@@ -9,8 +9,10 @@ package org.eclipse.xtext.builder.impl;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.internal.jobs.InternalJob;
@@ -120,10 +122,11 @@ public class XtextBuilder extends IncrementalProjectBuilder {
 	@SuppressWarnings("rawtypes")
 	@Override
 	protected IProject[] build(final int kind, Map args, IProgressMonitor monitor) throws CoreException {
+		IProject[] result = getProject().getReferencedProjects();
 		if (IBuildFlag.FORGET_BUILD_STATE_ONLY.isSet(args)) {
 			forgetLastBuiltState();
 			System.out.println("forget " + getProject().getName() + " " + getKindAsString(kind));
-			return getProject().getReferencedProjects();
+			return result;
 		}
 		System.out.println("build " + getProject().getName() + " " + getKindAsString(kind));
 		Job.getJobManager().addJobChangeListener(MAKE_EGIT_JOB_SYSTEM);
@@ -184,7 +187,8 @@ public class XtextBuilder extends IncrementalProjectBuilder {
 			task.stop();
 			Job.getJobManager().removeJobChangeListener(MAKE_EGIT_JOB_SYSTEM);
 		}
-		return getProject().getReferencedProjects();
+		System.out.println("Result for " + getProject().getName() + " -> " + (Arrays.stream(result).map(IProject::getName).collect(Collectors.joining(", "))));
+		return result;
 	}
 
 	private boolean shouldCancelBuild(int buildKind) {

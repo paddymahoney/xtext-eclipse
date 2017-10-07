@@ -99,8 +99,9 @@ public abstract class AbstractScopeResourceDescriptionsTest {
 			assertTrue(enabled);
 		} catch (Throwable t) {
 			assertFalse(enabled);
-			if (!(Throwables.getRootCause(t) instanceof org.eclipse.core.internal.resources.ResourceException))
-				Throwables.propagate(t);
+			if (!(Throwables.getRootCause(t) instanceof org.eclipse.core.internal.resources.ResourceException)) {
+				throw new IllegalStateException("mimimi " + (Throwables.getRootCause(t) instanceof org.eclipse.core.internal.resources.ResourceException) + " " + Throwables.getRootCause(t).getClass(), Throwables.getRootCause(t));
+			}
 		} finally {
 			dirtyStateManager.discardDirtyState(mockDirtyResource);
 		}
